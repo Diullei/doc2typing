@@ -5,7 +5,7 @@ module d2t {
         text: string;
     }
 
-    export class Comment {
+    export class DocComment {
         text: string;
         tags: Tag[] = [];
 
@@ -81,7 +81,7 @@ module d2t {
         }
 
         public exec(): any {
-            var comments: Comment[] = [];
+            var comments: DocComment[] = [];
 
             var reg = new RegExp('(/\\*([^*]|[\r\n]|(\\*+([^*/]|[\r\n])))*\\*+/)|(//.*)', 'gi');
             var result;
@@ -91,7 +91,7 @@ module d2t {
 
             while ((result = reg.exec(text)) !== null) {
                 var match = result[0];
-                comments.push(new Comment(match));
+                comments.push(new DocComment(match));
                 text = text.substr(result[0].index);
                 c += match.length;
             }
