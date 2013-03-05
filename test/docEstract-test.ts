@@ -56,6 +56,6 @@ this can span multiple lines.');
 
 QUnit.test("extract tags", function () {
     var comments: d2t.Comment[] = new d2t.Parser(fs.readFileSync("test/fixtures/comment.js", 'utf8')).exec();
-    QUnit.equal(comments[1].tags[2].name, 'param');
-    QUnit.equal(comments[1].tags[2].text, '{Object} config A config object');
+    QUnit.equal(comments[1].tags[0].name, 'method');
+    QUnit.equal(comments[1].tags[0].text, 'methodName');
 });

@@ -12,15 +12,18 @@ module d2t {
         constructor(public block: string) {
             this.text = '';
             var unwrapBlock = this.unwrap(block);
-            this.tags = this.splitTags(unwrapBlock);
 
+            var tagLines = '';
             var lines = unwrapBlock.match(/^.*((\r\n|\n|\r)|$)/gm);
             for (var i = 0; i < lines.length; i++) {
                 var line = lines[i];
                 if (this.isText(line)) {
                     this.text += line + '\n';
+                } else {
+                    tagLines += line + '\n';
                 }
             }
+            this.tags = this.splitTags(tagLines);
             this.text = this.text.trim();
         }
 
@@ -55,8 +58,8 @@ module d2t {
 
                     if (parsedTag) {
                         // we don't need parsedTag[0]
-                        tagTitle = parsedTag[1];
-                        tagText = parsedTag[2];
+                        tagTitle = (parsedTag[1] || '').trim();
+                        tagText = (parsedTag[2] || '').trim();
 
                         if (tagTitle) {
                             tags.push(<Tag>{
