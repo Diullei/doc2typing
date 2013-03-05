@@ -13,6 +13,7 @@ module d2t {
             this.text = '';
             var unwrapBlock = this.unwrap(block);
             this.tags = this.splitTags(unwrapBlock);
+
             var lines = unwrapBlock.match(/^.*((\r\n|\n|\r)|$)/gm);
             for (var i = 0; i < lines.length; i++) {
                 var line = lines[i];
@@ -20,6 +21,7 @@ module d2t {
                     this.text += line + '\n';
                 }
             }
+            this.text = this.text.trim();
         }
 
         isText(value: string) {
