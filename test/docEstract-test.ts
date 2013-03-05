@@ -34,6 +34,25 @@ this can span multiple lines.');
 
 QUnit.test("extract tags", function () {
     var comments: d2t.DocComment[] = new d2t.Parser(fs.readFileSync("test/fixtures/comment.js", 'utf8')).exec();
+
     QUnit.equal(comments[1].tags[0].name, 'method');
     QUnit.equal(comments[1].tags[0].text, 'methodName');
+
+    QUnit.equal(comments[1].tags[1].name, 'param');
+    QUnit.equal(comments[1].tags[1].text, '{String} foo Argument 1');
+
+    QUnit.equal(comments[1].tags[2].name, 'param');
+    QUnit.equal(comments[1].tags[2].text, '{Object} config A config object');
+
+    QUnit.equal(comments[1].tags[3].name, 'param');
+    QUnit.equal(comments[1].tags[3].text, '{String} config.name The name on the config object');
+
+    QUnit.equal(comments[1].tags[4].name, 'param');
+    QUnit.equal(comments[1].tags[4].text, '{Function} config.callback A callback function on the config object');
+
+    QUnit.equal(comments[1].tags[5].name, 'param');
+    QUnit.equal(comments[1].tags[5].text, '{Boolean} [extra=false] Do extra, optional work');
+
+    QUnit.equal(comments[1].tags[6].name, 'return');
+    QUnit.equal(comments[1].tags[6].text, '{Boolean} Returns true on success');
 });
