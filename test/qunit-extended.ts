@@ -13,6 +13,7 @@ QUnit.scapeEqual = function (actual: string, expected: string, message?: string)
         text = text.replace(/\r/g, '¬');
         text = text.replace(/\n/g, '«');
         text = text.replace(/\s/g, '·');
+        text = text.replace(/«/g, '«\n');
 
         return text;
     }

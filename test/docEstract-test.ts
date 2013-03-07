@@ -28,7 +28,7 @@ QUnit.test("extract comment block", function () {
 
 QUnit.test("extract comment text", function () {
     var comments: d2t.DocComment[] = new d2t.Parser(fs.readFileSync("test/fixtures/comment.js", 'utf8')).exec();
-    QUnit.scapeEqual(comments[1].text, 'My method description. Like other pieces of your comment blocks, \r\n\
+    QUnit.scapeEqual(comments[1].text, 'My method description. Like other pieces of your comment blocks, \r\
 this can span multiple lines.');
 });
 
@@ -55,4 +55,25 @@ QUnit.test("extract tags", function () {
 
     QUnit.equal(comments[1].tags[6].name, 'return');
     QUnit.equal(comments[1].tags[6].text, '{Boolean} Returns true on success');
+});
+
+QUnit.test("extract comment text 2", function () {
+    var comments: d2t.DocComment[] = new d2t.Parser(fs.readFileSync("test/fixtures/comment2.js", 'utf8')).exec();
+    QUnit.scapeEqual(comments[0].text, 'Define an assertion that will throw an exception if the condition is not\r\n\
+  met. Ember build tools will remove any calls to `Ember.assert()` when\r\n\
+  doing a production build. Example:');
+});
+
+QUnit.test("extract code block", function () {
+    var comments: d2t.DocComment[] = new d2t.Parser(fs.readFileSync("test/fixtures/comment2.js", 'utf8')).exec();
+    QUnit.scapeEqual(comments[0].codeBlock.code, '// Test for truthiness\r\n\
+  Ember.assert(\'Must pass a valid object\', obj);\r\n\
+  // Fail unconditionally\r\n\
+  Ember.assert(\'This code path should never be run\')');
+});
+
+QUnit.test("extract multline tag text", function () {
+    var comments: d2t.DocComment[] = new d2t.Parser(fs.readFileSync("test/fixtures/comment2.js", 'utf8')).exec();
+    QUnit.scapeEqual(comments[0].tags[1].text, '{String} desc A description of the assertion. This will become\r\n\
+    the text of the Error thrown if the assertion fails.');
 });

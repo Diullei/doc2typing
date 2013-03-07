@@ -5,22 +5,57 @@ module d2t {
         text: string;
     }
 
+    export class CodeBlock {
+        code: string;
+        lang: string;
+
+        constructor() {
+            this.code = '';
+            this.lang = 'n/d';
+        }
+    }
+
     export class DocComment {
         text: string;
         tags: Tag[] = [];
+        codeBlock: CodeBlock;
 
         constructor(public block: string) {
+            this.codeBlock = new CodeBlock();
             this.text = '';
             var unwrapBlock = this.unwrap(block);
+            var inCodeBlock = false;
+            var inTextBlock = true;
 
             var tagLines = '';
             var lines = unwrapBlock.match(/^.*((\r\n|\n|\r)|$)/gm);
             for (var i = 0; i < lines.length; i++) {
                 var line = lines[i];
-                if (this.isText(line)) {
-                    this.text += line + '\n';
+
+                // is block code start?
+                if (line.match(/```\w+/gm)) {
+                    inCodeBlock = true;
+                    continue;
+                }
+
+                if (inCodeBlock) {
+                    // is block code end?
+                    if (line.trim() == '```') {
+                        inCodeBlock = false;
+                        this.codeBlock.code = this.codeBlock.code.trim();
+                    } else
+                        this.codeBlock.code += line;
                 } else {
-                    tagLines += line + '\n';
+                    if (inTextBlock) {
+                        if (this.isText(line)) {
+                            this.text += line;
+                        } else {
+                            inTextBlock = false;
+                            tagLines += line;
+                        }
+                    } else {
+                        tagLines += line;
+                    }
                 }
             }
             this.tags = this.splitTags(tagLines);
