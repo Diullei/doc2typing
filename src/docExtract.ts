@@ -22,10 +22,10 @@ module d2t {
 
         constructor(public block: string) {
             this.codeBlock = new CodeBlock();
-            this.text = '';
             var unwrapBlock = this.unwrap(block);
             var inCodeBlock = false;
             var inTextBlock = true;
+            this.text = '';
 
             var tagLines = '';
             var lines = unwrapBlock.match(/^.*((\r\n|\n|\r)|$)/gm);

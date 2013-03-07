@@ -1,1 +1,1 @@
-tsc ./src/docEstract.ts
+tsc ./src/docExtract.ts

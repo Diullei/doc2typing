@@ -31,10 +31,10 @@ var d2t;
             this.block = block;
             this.tags = [];
             this.codeBlock = new CodeBlock();
-            this.text = '';
             var unwrapBlock = this.unwrap(block);
             var inCodeBlock = false;
             var inTextBlock = true;
+            this.text = '';
             var tagLines = '';
             var lines = unwrapBlock.match(/^.*((\r\n|\n|\r)|$)/gm);
             for(var i = 0; i < lines.length; i++) {

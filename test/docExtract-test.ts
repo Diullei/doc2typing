@@ -4,7 +4,7 @@
 
 // dependencies
 /// <reference path="qunit-extended.ts" />
-/// <reference path="../src/docEstract.ts" />
+/// <reference path="../src/docExtract.ts" />
 
 var fs = require("fs");
 
