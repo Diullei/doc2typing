@@ -3,6 +3,9 @@
 *.pdb
 *.suo
 *.js
+!test/*.js
+!test/*/*.js
+!test/*/*/*.js
 *.user
 *.cache
 *.cs
