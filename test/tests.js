@@ -107,15 +107,27 @@ var d2t;
             var comments = [];
             var reg = new RegExp('(/\\*([^*]|[\r\n]|(\\*+([^*/]|[\r\n])))*\\*+/)|(//.*)', 'gi');
             var result;
-            var c = 0;
             var text = this.code;
             while((result = reg.exec(text)) !== null) {
                 var match = result[0];
-                comments.push(new DocComment(match));
-                text = text.substr(result[0].index);
-                c += match.length;
+                var comment = new DocComment(match);
+                var lines = text.substr(match.length + result.index).match(/^.*((\r\n|\n|\r)|$)/gm);
+                for(var i = 0; i < lines.length; i++) {
+                    if(lines[i].trim()) {
+                        comment.target = this.extractJsInvokeName(lines[i]);
+                        break;
+                    }
+                }
+                comments.push(comment);
             }
             return comments;
+        };
+        Parser.prototype.extractJsInvokeName = function (code) {
+            var result = '';
+            if(code.match(/function\s+\w+\(/g)) {
+                result = code.trim().split(' ')[1].split('(')[0];
+            }
+            return result;
         };
         return Parser;
     })();
@@ -176,4 +188,9 @@ QUnit.test("extract multline tag text", function () {
     var comments = new d2t.Parser(fs.readFileSync("test/fixtures/comment2.js", 'utf8')).exec();
     QUnit.scapeEqual(comments[0].tags[1].text, '{String} desc A description of the assertion. This will become\r\n\
     the text of the Error thrown if the assertion fails.');
+});
+QUnit.test("extract when.js tags", function () {
+    var comments = new d2t.Parser(fs.readFileSync("test/fixtures/when.js", 'utf8')).exec();
+    var index = 0;
+    QUnit.scapeEqual('when', comments[16].target);
 });

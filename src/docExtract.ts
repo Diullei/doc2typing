@@ -17,6 +17,7 @@ module d2t {
 
     export class DocComment {
         text: string;
+        target: string;
         tags: Tag[] = [];
         codeBlock: CodeBlock;
 
@@ -121,17 +122,32 @@ module d2t {
             var reg = new RegExp('(/\\*([^*]|[\r\n]|(\\*+([^*/]|[\r\n])))*\\*+/)|(//.*)', 'gi');
             var result;
 
-            var c = 0;
             var text = this.code;
 
             while ((result = reg.exec(text)) !== null) {
                 var match = result[0];
-                comments.push(new DocComment(match));
-                text = text.substr(result[0].index);
-                c += match.length;
+                var comment = new DocComment(match);
+
+                var lines = text.substr(match.length + result.index).match(/^.*((\r\n|\n|\r)|$)/gm);
+                for (var i = 0; i < lines.length; i++) {
+                    if (lines[i].trim()) {
+                        comment.target = this.extractJsInvokeName(lines[i]);
+                        break;
+                    }
+                }
+                comments.push(comment);
             }
 
             return comments;
+        }
+
+        private extractJsInvokeName(code: string) {
+            var result = '';
+            // function FUNCTION_NAME(...)
+            if (code.match(/function\s+\w+\(/g)) {
+                result = code.trim().split(' ')[1].split('(')[0];
+            }
+            return result;
         }
     }
 }

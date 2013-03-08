@@ -77,3 +77,9 @@ QUnit.test("extract multline tag text", function () {
     QUnit.scapeEqual(comments[0].tags[1].text, '{String} desc A description of the assertion. This will become\r\n\
     the text of the Error thrown if the assertion fails.');
 });
+
+QUnit.test("extract when.js tags", function () {
+    var comments: d2t.DocComment[] = new d2t.Parser(fs.readFileSync("test/fixtures/when.js", 'utf8')).exec();
+    var index = 0;
+    QUnit.scapeEqual('when', comments[16].target);
+});
